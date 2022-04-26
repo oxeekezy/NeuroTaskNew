@@ -28,12 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.MainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.RadialBasicsBtn = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.line = new System.Windows.Forms.RadioButton();
+            this.fastline = new System.Windows.Forms.RadioButton();
+            this.spline = new System.Windows.Forms.RadioButton();
             this.hiddenNeuronsCount = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.function = new System.Windows.Forms.ComboBox();
@@ -44,9 +47,6 @@
             this.xBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.KohanenBtn = new System.Windows.Forms.Button();
-            this.spline = new System.Windows.Forms.RadioButton();
-            this.fastline = new System.Windows.Forms.RadioButton();
-            this.line = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.MainChart)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -56,10 +56,10 @@
             // 
             // MainChart
             // 
-            chartArea3.Name = "ChartArea1";
-            this.MainChart.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.MainChart.Legends.Add(legend3);
+            chartArea2.Name = "ChartArea1";
+            this.MainChart.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.MainChart.Legends.Add(legend2);
             this.MainChart.Location = new System.Drawing.Point(12, 12);
             this.MainChart.Name = "MainChart";
             this.MainChart.Size = new System.Drawing.Size(776, 367);
@@ -85,6 +85,8 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(776, 119);
             this.tabControl1.TabIndex = 2;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControl1.TabIndexChanged += new System.EventHandler(this.tabControl1_TabIndexChanged);
             // 
             // tabPage1
             // 
@@ -103,6 +105,42 @@
             this.tabPage1.Text = "Radial Basics Task";
             this.tabPage1.UseVisualStyleBackColor = true;
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // line
+            // 
+            this.line.AutoSize = true;
+            this.line.Location = new System.Drawing.Point(499, 57);
+            this.line.Name = "line";
+            this.line.Size = new System.Drawing.Size(45, 17);
+            this.line.TabIndex = 8;
+            this.line.TabStop = true;
+            this.line.Text = "Line";
+            this.line.UseVisualStyleBackColor = true;
+            this.line.CheckedChanged += new System.EventHandler(this.line_CheckedChanged);
+            // 
+            // fastline
+            // 
+            this.fastline.AutoSize = true;
+            this.fastline.Location = new System.Drawing.Point(499, 34);
+            this.fastline.Name = "fastline";
+            this.fastline.Size = new System.Drawing.Size(65, 17);
+            this.fastline.TabIndex = 7;
+            this.fastline.TabStop = true;
+            this.fastline.Text = "FastLine";
+            this.fastline.UseVisualStyleBackColor = true;
+            this.fastline.CheckedChanged += new System.EventHandler(this.fastline_CheckedChanged);
+            // 
+            // spline
+            // 
+            this.spline.AutoSize = true;
+            this.spline.Location = new System.Drawing.Point(499, 9);
+            this.spline.Name = "spline";
+            this.spline.Size = new System.Drawing.Size(54, 17);
+            this.spline.TabIndex = 6;
+            this.spline.TabStop = true;
+            this.spline.Text = "Spline";
+            this.spline.UseVisualStyleBackColor = true;
+            this.spline.CheckedChanged += new System.EventHandler(this.spline_CheckedChanged);
             // 
             // hiddenNeuronsCount
             // 
@@ -196,42 +234,6 @@
             this.KohanenBtn.Text = "Get Kohanen";
             this.KohanenBtn.UseVisualStyleBackColor = true;
             this.KohanenBtn.Click += new System.EventHandler(this.KohanenBtn_Click);
-            // 
-            // spline
-            // 
-            this.spline.AutoSize = true;
-            this.spline.Location = new System.Drawing.Point(499, 9);
-            this.spline.Name = "spline";
-            this.spline.Size = new System.Drawing.Size(54, 17);
-            this.spline.TabIndex = 6;
-            this.spline.TabStop = true;
-            this.spline.Text = "Spline";
-            this.spline.UseVisualStyleBackColor = true;
-            this.spline.CheckedChanged += new System.EventHandler(this.spline_CheckedChanged);
-            // 
-            // fastline
-            // 
-            this.fastline.AutoSize = true;
-            this.fastline.Location = new System.Drawing.Point(499, 34);
-            this.fastline.Name = "fastline";
-            this.fastline.Size = new System.Drawing.Size(65, 17);
-            this.fastline.TabIndex = 7;
-            this.fastline.TabStop = true;
-            this.fastline.Text = "FastLine";
-            this.fastline.UseVisualStyleBackColor = true;
-            this.fastline.CheckedChanged += new System.EventHandler(this.fastline_CheckedChanged);
-            // 
-            // line
-            // 
-            this.line.AutoSize = true;
-            this.line.Location = new System.Drawing.Point(499, 57);
-            this.line.Name = "line";
-            this.line.Size = new System.Drawing.Size(45, 17);
-            this.line.TabIndex = 8;
-            this.line.TabStop = true;
-            this.line.Text = "Line";
-            this.line.UseVisualStyleBackColor = true;
-            this.line.CheckedChanged += new System.EventHandler(this.line_CheckedChanged);
             // 
             // Form1
             // 

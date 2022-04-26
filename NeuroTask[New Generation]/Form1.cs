@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using Colors = System.Drawing.Color;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,7 @@ namespace NeuroTask_New_Generation_
 
         AprocReadyFunction func;
         ChartManager manager;
+        Kohanen kohanen;
         List<Point> original;
         List<Tuple<string, ForAprocFunctions>> functions = new List<Tuple<string, ForAprocFunctions>>()
             {
@@ -109,10 +111,19 @@ namespace NeuroTask_New_Generation_
 
         private void KohanenBtn_Click(object sender, EventArgs e)
         {
-            ChartCleaner(MainChart);
+            
             if (double.TryParse(xBox.Text, out double x) && double.TryParse(yBox.Text, out double y))
             {
-                Kohanen kohanen = new Kohanen(MainChart, 3, 10000, 0.001);
+                if(kohanen==null)
+                    kohanen = new Kohanen
+                    (
+                        MainChart, 
+                        1000, 
+                        0.001, 
+                        new Cluster("Red cluster", Colors.Red, new Point(3,8)),  
+                        new Cluster("Blue cluster", Colors.Blue, new Point(5,-5)),  
+                        new Cluster("Pink cluster", Colors.DeepPink, new Point(0,-4))  
+                    );
                 MessageBox.Show(kohanen.CheckPoint(new Point(x, y)));
             }
             else 
@@ -151,6 +162,16 @@ namespace NeuroTask_New_Generation_
             if (line.Checked)
                 foreach (var s in MainChart.Series)
                     s.ChartType = SeriesChartType.Line;
+        }
+
+        private void tabControl1_TabIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ChartCleaner(MainChart);
         }
     }
 }

@@ -21,9 +21,11 @@ namespace NeuronsTask
         double _learningRate;
         double[,] weightsMatrix;
 
-        public Kohanen(Chart chart, int cluster, int epoch, double lRate) 
+        Dictionary<int, int> numeration;
+
+        public Kohanen(Chart chart, int epoch, double lRate, params Cluster[] clusters)
         {
-            _clusterCount = cluster;
+            _clusterCount = clusters.Length;
             _epoch = epoch;
             _learningRate = lRate;
             manager = new ChartManager(chart);
@@ -38,21 +40,61 @@ namespace NeuronsTask
                 }
             }
 
-            List<Point> points = new List<Point>();
-            List<Point> cluster1 = GenClasterbyOrigin(4, 4, 20);
-            List<Point> cluster2 = GenClasterbyOrigin(4, -4, 20);
-            List<Point> cluster3 = GenClasterbyOrigin(-5, 4, 20);
-            List<List<Point>> clusters = new List<List<Point>>() {cluster1,cluster2,cluster3};
-
-            manager.SetPointSeries("cluster1", Color.Red, cluster1.ToArray());
-            manager.SetPointSeries("cluster2", Color.Blue, cluster2.ToArray());
-            manager.SetPointSeries("cluster3", Color.DeepPink, cluster3.ToArray());
             
 
-            points.AddRange(cluster1);
-            points.AddRange(cluster2);
-            points.AddRange(cluster3);
+            List<Point> points = new List<Point>();
+            List<Point> trustedPoints = new List<Point>();
+            List<Cluster> allClusters = new List<Cluster>();
 
+            foreach (var tp in clusters)
+            {
+                Cluster cluster = new Cluster(tp.name, tp.color, tp.startPoint);
+                cluster.points = GenClasterbyOrigin(cluster.startPoint, 35);
+                points.AddRange(cluster.points);
+                trustedPoints.Add(cluster.startPoint);
+                allClusters.Add(cluster);
+            }
+
+            numeration = RepairNumeration(trustedPoints.ToList());
+
+            int ii = 0;
+            foreach(var c in allClusters)
+            {
+                manager.SetPointSeries(c.name, c.color, c.points.ToArray());
+                ii++;
+            }
+
+            Learn(points);
+        }
+
+        private Dictionary<int, int> RepairNumeration(List<Point> trs_pts) 
+        {
+            Dictionary<int,int> newNumeration = new Dictionary<int,int>();
+
+            for (int i = 0; i < trs_pts.Count; i++)
+            {
+                List<double> result = new List<double>();
+                Point testPoint = trs_pts[i];
+
+                for (int j = 0; j < weightsMatrix.GetLength(0); j++) 
+                {
+                    var weight  = new Vector(weightsMatrix[j, 0], weightsMatrix[j, 1]);
+                    result.Add(weight * new Vector(testPoint.X, testPoint.Y));
+                }
+
+                var max = result.Max();
+                var index = result.IndexOf(max);
+
+                newNumeration.Add(i,index);
+
+                Debug.Write($"{i} -- {index}\n");
+            }
+
+            return newNumeration;
+        }
+
+        private void Learn(List<Point> points)
+        {
             for (int ep = 0; ep < _epoch; ep++)
             {
                 for (int k = 0; k < points.Count; k++)
@@ -78,34 +120,6 @@ namespace NeuronsTask
                     weightsMatrix[index, 1] = newWeight.Y;
                 }
             }
-
-            
-            Dictionary<int, int> resultsD = new Dictionary<int, int>();
-
-            for (int c = 0; c < clusters.Count; c++) 
-            {
-                foreach (var p in clusters[c]) 
-                {
-                    List<double> result2 = new List<double>();
-                    for (int i = 0; i < weightsMatrix.GetLength(0); i++)
-                    {
-                        Vector weight = new Vector(weightsMatrix[i, 0], weightsMatrix[i, 1]);
-
-                        double res = weight * new Vector(p.X, p.Y);
-                        result2.Add(res);
-                    }
-                    double max = result2.Max();
-                    int index2 = result2.IndexOf(max);
-
-                    //resultsD.Add(c,index2);
-                    Debug.Write($"Original: {c}\tNeuronus: {index2}\n");
-                }
-                Debug.Write($"\n\n");
-            }
-
-            
-
-            //result = "Кластер № "/* +(index2 + 1).ToString()*/;
         }
 
         public string CheckPoint(Point point) 
@@ -123,19 +137,19 @@ namespace NeuronsTask
 
             double max = result2.Max();
             int index2 = result2.IndexOf(max);
-
-            return "Кластер № "+(index2 + 1).ToString();
+            
+            return "Кластер № "+numeration.First(x=>x.Value==index2).Key.ToString();
         }
 
-        List<Point> GenClasterbyOrigin(double x, double y, int count)
+        List<Point> GenClasterbyOrigin(Point point, int count)
         {
             List<Point> result = new List<Point>();
 
-            result.Add(new Point(x, y));
+            result.Add(point);
 
             for (int i = 0; i < count; i++)
             {
-                result.Add(new Point(x + rand.NextDouble(), y + rand.NextDouble()));
+                result.Add(new Point(point.X + rand.NextDouble(), point.Y + rand.NextDouble()));
             }
 
             return result;

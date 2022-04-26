@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AprocReadyFunction.cs" />
+    <Compile Include="Cluster.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
